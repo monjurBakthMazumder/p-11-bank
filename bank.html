@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- tailwind css and daisy ui cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.25.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon">
+    <title>Mazumder Bank</title>
+</head>
+<body class="text-white">
+    <h1 class="text-3xl md:text-4xl xl:text-5xl font-medium text-center my-5 xl:my-12">Welcome to <span class="font-bold">Mazumder</span> Bank</h1>
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-8 xl:w-4/5 w-11/12 mx-auto my-10">
+        <div class="bg-gray-600 rounded-xl p-5 xl:p-10 shadow-2xl flex-1">
+            <h1 class="text-2xl font-semibold mb-2">Deposited</h1>
+            <h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold ">$<span id="totalDeposited">00</span></h2>
+        </div>
+        <div class="bg-gray-600 rounded-xl p-5 xl:p-10 shadow-2xl flex-1">
+            <h1 class="text-2xl font-semibold mb-2">Balance</h1>
+            <h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold ">$<span id="totalBalance">00</span></h2>
+        </div>
+        <div class="bg-gray-600 rounded-xl p-5 xl:p-10 shadow-2xl flex-1">
+            <h1 class="text-2xl font-semibold mb-2">Withdraw</h1>
+            <h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold ">$<span id="totalWithdraw">00</span></h2>
+        </div>
+    </div>
+    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-8 xl:w-4/5 w-11/12 mx-auto my-10">
+        <div class="bg-gray-600 rounded-xl p-5 xl:p-10 shadow-2xl flex-1">
+            <h1 class="text-2xl font-semibold">Deposited</h1>
+            <input id="depositedField" type="text" class="block bg-gray-700 p-3 rounded mt-7 mb-5 w-full border-2 border-gray-400" placeholder="$Amount you want to deposited">
+            <button id="btn-deposited" class="btn btn-ghost bg-gray-800">Deposited now</button>
+        </div>
+        <div class="bg-gray-600 rounded-xl p-5 xl:p-10 shadow-2xl flex-1">
+            <h1 class="text-2xl font-semibold">Withdraw</h1>
+            <input id="withdrawField" type="text" class="block bg-gray-700 p-3 rounded mt-7 mb-5 w-full border-2 border-gray-400" placeholder="$Amount you want to withdraw">
+            <button id="btn-withdraw" class="btn btn-ghost bg-gray-800">Withdraw now</button>
+        </div>
+    </div>
+    <h1 class="text-2xl md:text-3xl xl:text-4xl font-medium text-center mt-5 xl:mt-12">History</h1>
+    <div class="overflow-x-auto xl:w-4/5 w-11/12 mx-auto my-4 xl:my-8">
+        <table class="table w-full">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Previous</th>
+              <th>Current</th>
+              <th>Total</th>
+              <th>Previous Balance</th>
+              <th>Total Balance</th>
+            </tr>
+          </thead>
+          <tbody id="container">
+          </tbody>
+        </table>
+      </div>
+    <script>
+        function getInputFieldValueById(inputFieldId){
+            const inputField = document.getElementById(inputFieldId);
+            const inputFieldValueString = inputField.value;
+            const inputFieldValue = Number(inputFieldValueString);
+            inputField.value = "";
+            return inputFieldValue;
+        }
+        function getTextElementValueById(elementId){
+            const textElement = document.getElementById(elementId);
+            const textElementString = textElement.innerText;
+            const textElementValue = Number(textElementString);
+            return textElementValue;
+        }
+        function setTextElementValueById(elementId, newValue){
+            const textElement = document.getElementById(elementId);
+            textElement.innerText=newValue.toFixed(2);
+        }
+        document.getElementById('btn-deposited').addEventListener('click', function(){
+            const newDepositedAmount = getInputFieldValueById('depositedField');
+            const previousDepositedTotal = getTextElementValueById('totalDeposited');
+            const newDepositedTotal = previousDepositedTotal + newDepositedAmount;
+            const previousBalanceTotal = getTextElementValueById('totalBalance');
+            const newBalanceTotal = previousBalanceTotal + newDepositedAmount;
+            isNaN(newDepositedAmount)?alert('This is not a number.Please enter number'):newDepositedAmount < 0 ?alert('Please enter positive amount') : setTextElementValueById('totalDeposited', newDepositedTotal);
+            isNaN(newDepositedAmount)? console.log() :newDepositedAmount < 0 ? console.log() : setTextElementValueById('totalBalance', newBalanceTotal);
+
+            const container = document.getElementById('container');
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td');
+            td1.innerText = "Deposited";
+            const td2 = document.createElement('td');
+            td2.innerText = previousDepositedTotal;
+            const td3 = document.createElement('td');
+            td3.innerText = newDepositedAmount;
+            const td4 = document.createElement('td');
+            td4.innerText = newDepositedTotal;
+            const td5 = document.createElement('td');
+            td5.innerText = previousBalanceTotal;
+            const td6 = document.createElement('td');
+            td6.innerText = newBalanceTotal;
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tr.appendChild(td6);
+            isNaN(newDepositedAmount)? console.log() :
+             newDepositedAmount < 0 ? console.log() :
+             newDepositedAmount == '' ? console.log() :
+             container.appendChild(tr);
+        })
+        document.getElementById('btn-withdraw').addEventListener('click', function(){
+            const newWithdrawAmount = getInputFieldValueById('withdrawField');
+            const previousWithdrawTotal = getTextElementValueById('totalWithdraw');
+            const newWithdrawTotal = previousWithdrawTotal + newWithdrawAmount;
+            const previousBalanceTotal = getTextElementValueById('totalBalance');
+            const newBalanceTotal = previousBalanceTotal - newWithdrawAmount;
+            isNaN(newWithdrawAmount)? alert('This is not a number.Please enter number') : newWithdrawAmount < 0 ? alert('Please enter positive amount') : newWithdrawAmount > previousBalanceTotal ? alert('There is not enough balance here') : setTextElementValueById('totalWithdraw', newWithdrawTotal);
+            isNaN(newWithdrawAmount)? console.log() : newWithdrawAmount < 0 ? console.log() : newWithdrawAmount > previousBalanceTotal? console.log() :setTextElementValueById('totalBalance', newBalanceTotal);
+
+            const container = document.getElementById('container');
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td');
+            td1.innerText = "Withdraw";
+            const td2 = document.createElement('td');
+            td2.innerText = previousWithdrawTotal;
+            const td3 = document.createElement('td');
+            td3.innerText = newWithdrawAmount;
+            const td4 = document.createElement('td');
+            td4.innerText = newWithdrawTotal;
+            const td5 = document.createElement('td');
+            td5.innerText = previousBalanceTotal;
+            const td6 = document.createElement('td');
+            td6.innerText = newBalanceTotal;
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tr.appendChild(td6);
+            isNaN(newWithdrawAmount)? console.log() :
+            newWithdrawAmount < 0 ? console.log() : 
+            newWithdrawAmount > previousBalanceTotal? console.log() : 
+             container.appendChild(tr);
+        })               
+    </script>
+</body>
+</html>
